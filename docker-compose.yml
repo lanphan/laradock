@@ -340,6 +340,7 @@ services:
         - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
       networks:
         - backend
+      command: --table_definition_cache=1024
 
 ### PostgreSQL ###########################################
     postgres:

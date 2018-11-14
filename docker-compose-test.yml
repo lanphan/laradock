@@ -1,0 +1,58 @@
+version: '2'
+
+services:
+### Testing Code Container #############################
+  test_applications:
+    image: tianon/true
+    volumes:
+      - ${TEST_APPLICATION}:/tests
+
+### Testing Utilities Container ###########################
+
+  # chrome:
+    # image: "selenium/standalone-chrome-debug:2.53.0"
+    # ports:
+      # - "4444:4444"
+      # - "5900:5900"
+    # networks:
+      # - frontend
+      # - backend
+
+  selenoid:
+    image: "aerokube/selenoid"
+    networks:
+      - frontend
+    ports:
+      - "${SELENOID_PORT}:4444"
+    #command: ["-container-network", "beetracklaradocklocalwithtest_frontend"]
+    volumes:
+      # - "$PWD/selenoid/:/etc/selenoid/" # assumed current dir contains browsers.json
+      - "${SELENOID_CONFIG}:/etc/selenoid/"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./results/video:/opt/selenoid/video/"
+    environment:
+      - OVERRIDE_VIDEO_OUTPUT_DIR=${PWD}/results/video/
+
+  selenoid-ui:
+    image: "aerokube/selenoid-ui"
+    networks:
+      - frontend
+    links:
+      - selenoid
+    ports:
+      - "${SELENOID_UI_PORT}:8080"
+    command: ["--selenoid-uri", "http://selenoid:4444"]
+
+  tests:
+    build:
+      context: ./beetrack-laradock-test/capybara/build
+    environment:
+      - APP_HOST=${TEST_HOST}
+    #networks:
+      #- frontend
+    #depends_on:
+      #- selenoid
+    volumes_from:
+      - test_applications
+    volumes:
+      - "${TEST_RESULT}:/results"

@@ -1,0 +1,25 @@
+{
+	"firefox": {
+		"default": "latest",
+		"versions": {
+			"latest": {
+				"image": "selenoid/vnc:firefox_63.0",
+				"port": "4444",
+				"path": "/wd/hub",
+				"hosts": ["beetrack.local:172.19.0.3"],
+				"tmpfs": {"/tmp":"size=512m"}
+			}
+		}
+	},
+	"chrome": {
+		"default": "latest",
+		"versions": {
+			"latest": {
+				"image": "selenoid/vnc:chrome_70.0",
+				"port": "4444",
+				"hosts": ["beetrack.local:172.19.0.3"],
+				"tmpfs": {"/tmp":"size=512m"}
+			}
+		}
+	}
+}
