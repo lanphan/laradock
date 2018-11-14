@@ -8,15 +8,19 @@ BEETRACK LARADOCK SETUP
        beetrack-test (optional, required if you need to run automation test)
 
 2. run
+
 ```shell
 docker-compose up -d nginx mariadb adminer
 ```
 
 3. exec into workspace
+
 ```shell
 docker-compose exec workspace bash
 ```
+
 then, run these commands below
+
 ```shell
 cd beetrack-web
 composer update
@@ -35,6 +39,7 @@ chmod -R 777 vendor/mpdf/mpdf/ttfontdata && chmod -R 755 vendor/mpdf/mpdf/graph_
 + Command #9: setup permission for pdf generating service
 
 4. update /etc/hosts to add site
+
 ```shell
 127.0.0.1   beetrack.local
 ```
@@ -42,6 +47,7 @@ chmod -R 777 vendor/mpdf/mpdf/ttfontdata && chmod -R 755 vendor/mpdf/mpdf/graph_
 5. use Chrome to open beetrack.local/ to browse
 
 6. check database, open localhost:8080 to open Adminer, fill in:
+
 ```
    System: MySQL
    Server: mariadb
@@ -52,24 +58,33 @@ chmod -R 777 vendor/mpdf/mpdf/ttfontdata && chmod -R 755 vendor/mpdf/mpdf/graph_
 
 7. Create HTTPS local environment for developers (Ubuntu)
    a. Go to XYZ/beetrack-laradock-local/nginx/ssl folder
+
 ```shell
 cd nginx/ssl
 ```
+
    b. Create key (must enter passphrase on Mac)
+
 ```shell
 openssl genrsa -des3 -out myssl.key 4096
 ``` 
+
    c. Create CSR:
+
 ```shell
 openssl req -new -key myssl.key -out myssl.csr
 ```
+
 and fill in the infomation. Common name will be your domain (beetrack.local). Note that this step will require passphrase, we will remove it in the next step (using passphrase on previous step).
    d. Remove passphrase:
+
 ```shell
 cp myssl.key myssl.key.org && openssl rsa -in myssl.key.org -out myssl.key
 ``` 
+
 You will be ask for passphrase one last time. Now you have 3 files in your temp folder: myssl.csr, myssl.key and myssl.key.org
    e. Create CRT:
+
 ```shell
 openssl x509 -req -days 365 -in myssl.csr -signkey myssl.key -out myssl.crt
 ```
@@ -96,7 +111,7 @@ openssl x509 -req -days 365 -in myssl.csr -signkey myssl.key -out myssl.crt
 
 Notes:
 =====
-If getting error about "Permission denied", read answer of Virtlink from https://stackoverflow.com/questions/24055056/laravel-log-could-not-be-opened-failed-to-open-stream to solve
+1. If getting error about "Permission denied", read answer of Virtlink from https://stackoverflow.com/questions/24055056/laravel-log-could-not-be-opened-failed-to-open-stream to solve
    a/ exec into workspace
    b/ run these commands in workspace container:
        b1/ go to  /var/www/beetrack-web  (or your site folder)
@@ -107,6 +122,12 @@ If getting error about "Permission denied", read answer of Virtlink from https:/
            php artisan dump-autoload
            composer dump-autoload
 
+2. If your environment is MacOS, you can use docker-sync in order to have better performance. Some tips:
+   a. Folder XYZ shouldn't contain too much data
+   b. Use ./sync.sh to run:
+        + ./sync.sh install  --> install docker-sync (must have gem install already)
+        + ./sync.sh up nginx mariadb adminer --> run docker-sync, then run docker-compose
+        + ./sync.sh down  --> down docker-sync and all
 
 
 
