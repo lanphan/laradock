@@ -129,6 +129,16 @@ Notes:
         + ./sync.sh up nginx mariadb adminer --> run docker-sync, then run docker-compose
         + ./sync.sh down  --> down docker-sync and all
 
+3. In order to make sure owner of logging must be laradock, please switch to user laradock after exec into workspace container
 
+```
+su - laradock
+```
+
+or
+
+```
+setuser laradock bash
+```
 
 

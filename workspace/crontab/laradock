@@ -1,1 +1,1 @@
-* * * * * laradock /usr/bin/php /var/www/beetrack-web schedule:run >> /dev/null 2>&1
+* * * * * laradock /usr/bin/php /var/www/beetrack-web/artisan schedule:run >> /dev/null 2>&1
