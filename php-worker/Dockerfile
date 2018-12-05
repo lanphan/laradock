@@ -31,6 +31,9 @@ ENV PUID ${PUID}
 ARG PGID=1000
 ENV PGID ${PGID}
 
+RUN addgroup -g ${PGID} laradock && \
+    adduser -D -G laradock -u ${PUID} laradock
+
 #Install SOAP package:
 ARG INSTALL_SOAP=false
 RUN if [ ${INSTALL_SOAP} = true ]; then \
