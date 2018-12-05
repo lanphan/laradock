@@ -41,7 +41,7 @@ display_options () {
     print_style "   install" "info"; printf "\t\t Installs docker-sync gem on the host machine.\n"
     print_style "   up [services]" "success"; printf "\t Starts docker-sync and runs docker compose.\n"
     print_style "   down" "success"; printf "\t\t\t Stops containers and docker-sync.\n"
-    print_style "   bash" "success"; printf "\t\t\t Opens bash on the workspace.\n"
+    print_style "   bash" "success"; printf "\t\t\t Opens bash on the workspace with laradock user.\n"
     print_style "   sync" "info"; printf "\t\t\t Manually triggers the synchronization of files.\n"
     print_style "   clean" "danger"; printf "\t\t Removes all files from docker-sync.\n"
 }
@@ -59,17 +59,17 @@ if [ "$1" == "up" ] ; then
 
     print_style "Initializing Docker Compose\n" "info"
     shift # removing first argument
-    docker-compose up -d ${@}
+    COMPOSE_FILE="docker-compose.yml:docker-compose.sync.yml" && docker-compose up -d ${@}
 
 elif [ "$1" == "down" ]; then
     print_style "Stopping Docker Compose\n" "info"
-    docker-compose stop
+    COMPOSE_FILE="docker-compose.yml:docker-compose.sync.yml" && docker-compose stop
 
     print_style "Stopping Docker Sync\n" "info"
     docker-sync stop
 
 elif [ "$1" == "bash" ]; then
-    docker-compose exec workspace bash
+    COMPOSE_FILE="docker-compose.yml:docker-compose.sync.yml" && docker-compose exec --user=laradock workspace bash
 
 elif [ "$1" == "install" ]; then
     print_style "Installing docker-sync\n" "info"
