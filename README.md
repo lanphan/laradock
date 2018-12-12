@@ -13,19 +13,20 @@ BEETRACK LARADOCK SETUP
 
 2. run
 
-```shell
-docker-compose up -d nginx mariadb adminer
+```bash
+cd beetrack-laradock-local
+docker-compose up -d nginx mariadb adminer php-worker beanstalkd beanstalkd-console
 ```
 
 3. exec into workspace
 
-```shell
+```bash
 docker-compose exec workspace bash
 ```
 
 then, run these commands below
 
-```shell
+```bash
 cd beetrack-web
 composer update
 php artisan migrate:refresh --seed
@@ -44,7 +45,7 @@ chmod -R 777 vendor/mpdf/mpdf/ttfontdata && chmod -R 755 vendor/mpdf/mpdf/graph_
 
 4. update /etc/hosts to add site
 
-```shell
+```bash
 127.0.0.1   beetrack.local
 ```
 
@@ -63,13 +64,13 @@ chmod -R 777 vendor/mpdf/mpdf/ttfontdata && chmod -R 755 vendor/mpdf/mpdf/graph_
 7. Create HTTPS local environment for developers (Ubuntu)
    a. Go to XYZ/beetrack-laradock-local/nginx/ssl folder
 
-```shell
+```bash
 cd nginx/ssl
 ```
 
    b. Create key (must enter passphrase on Mac)
 
-```shell
+```bash
 openssl genrsa -des3 -out myssl.key 4096
 ``` 
 
@@ -83,7 +84,7 @@ and fill in the infomation. Common name will be your domain (beetrack.local). No
 
    d. Remove passphrase:
 
-```shell
+```bash
 cp myssl.key myssl.key.org && openssl rsa -in myssl.key.org -out myssl.key
 ``` 
 
@@ -103,7 +104,7 @@ openssl x509 -req -days 365 -in myssl.csr -signkey myssl.key -out myssl.crt
     
   How to run: Start selenoid and selenoid-ui containers:
 
-```shell
+```bash
 docker-compose -f docker-compose.yml -f docker-compose-test.yml up -d selenoid selenoid-ui
 ```
 
@@ -115,7 +116,7 @@ docker-compose -f docker-compose.yml -f docker-compose-test.yml up -d selenoid s
 
    d. Run tests:
 
-```shell
+```bash
 docker-compose -f docker-compose.yml -f docker-compose-test.yml run tests
 ```
 
@@ -140,7 +141,7 @@ Notes:
 
        b4/ (optional)
 
-```shell
+```bash
            php artisan cache:clear
            php artisan dump-autoload
            composer dump-autoload
@@ -153,7 +154,8 @@ Notes:
    b. Use ./sync.sh to run:
 
         + ./sync.sh install  --> install docker-sync (must have gem install already)
-        + ./sync.sh up nginx mariadb adminer --> run docker-sync, then run docker-compose
+        + ./sync.sh up nginx mariadb adminer php-worker beanstalkd beanstalkd-console --> run docker-sync, then run docker-compose
+        + ./sync.sh beetrack --> short command for whole long command above
         + ./sync.sh down  --> down docker-sync and all
 
 3. In order to make sure owner of logging must be laradock, please switch to user laradock after exec into workspace container
