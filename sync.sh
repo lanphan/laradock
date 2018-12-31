@@ -41,6 +41,7 @@ display_options () {
     print_style "   install" "info"; printf "\t\t Installs docker-sync gem on the host machine.\n"
     print_style "   up [services]" "success"; printf "\t Starts docker-sync and runs docker compose.\n"
     print_style "   beetrack" "success"; printf "\t Starts docker-sync and all Beetrack services.\n"
+    print_style "   restart [services]" "success"; printf "\t Restart Beetrack services.\n"
     print_style "   down" "success"; printf "\t\t\t Stops containers and docker-sync.\n"
     print_style "   bash" "success"; printf "\t\t\t Opens bash on the workspace with laradock user.\n"
     print_style "   sync" "info"; printf "\t\t\t Manually triggers the synchronization of files.\n"
@@ -76,6 +77,11 @@ elif [ "$1" == "down" ]; then
 
     print_style "Stopping Docker Sync\n" "info"
     docker-sync stop
+
+elif [ "$1" == "restart" ]; then
+    print_style "Restarting Docker Compose\n" "info"
+    shift # removing first argument
+    COMPOSE_FILE="docker-compose.yml:docker-compose.sync.yml" && docker-compose restart ${@}
 
 elif [ "$1" == "bash" ]; then
     COMPOSE_FILE="docker-compose.yml:docker-compose.sync.yml" && docker-compose exec --user=laradock workspace bash

@@ -170,4 +170,20 @@ or
 setuser laradock bash
 ```
 
+4. Some commands for php-worker
+
+  a. Check status of all processes managed by supervisord
+```
+docker exec -it <container id of php-worker> supervisorctl status
+``` 
+
+  b. Restart 1 or multiple processes (don't re-read config file)
+```
+docker exec -it <container id of php-worker> supervisorctl restart <process name>
+```
+
+  c. Restart whole supervisord
+```
+docker exec -it <container id of php-worker> supervisorctl reload
+```
 
