@@ -23,6 +23,11 @@ RUN if [ ${INSTALL_MSSQL} = true ]; then \
   && echo "extension=pdo_sqlsrv.so" > /usr/local/etc/php/conf.d/20-pdo_sqlsrv.ini \
 ;fi
 
+RUN echo "upload_max_filesize = 500M" >> /usr/local/etc/php/conf.d/upload_large_dumps.ini \
+&& echo "post_max_size = 500M" >> /usr/local/etc/php/conf.d/upload_large_dumps.ini \
+&& echo "memory_limit = -1" >> /usr/local/etc/php/conf.d/upload_large_dumps.ini \
+&& echo "max_execution_time = 0" >> /usr/local/etc/php/conf.d/upload_large_dumps.ini
+
 USER adminer
 
 # We expose Adminer on port 8080 (Adminer's default)
