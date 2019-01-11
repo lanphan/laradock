@@ -15,7 +15,7 @@ BEETRACK LARADOCK SETUP
 
 ```bash
 cd beetrack-laradock-local
-docker-compose up -d nginx mariadb adminer php-worker beanstalkd beanstalkd-console
+docker-compose up -d nginx mariadb adminer php-worker rabbitmq
 ```
 
 3. exec into workspace
@@ -28,6 +28,7 @@ then, run these commands below
 
 ```bash
 cd beetrack-web
+cp .env.beetrack .env
 composer update
 php artisan migrate:refresh --seed
 php artisan passport:install
@@ -38,10 +39,10 @@ ln -s <absolute path>/storage/app/public public/storage
 chmod -R 777 vendor/mpdf/mpdf/ttfontdata && chmod -R 755 vendor/mpdf/mpdf/graph_cache/ vendor/mpdf/mpdf/tmp/
 ```
 
-+ Command #3: migrate (rollback then migrate) all, then seeding data
-+ Command #4: generate oauth key for passport
-+ Command #8: <absolute path> is absolute path of current directory in workspace container. This command required in order to share public files to Internet
-+ Command #9: setup permission for pdf generating service
++ Command #4: migrate (rollback then migrate) all, then seeding data
++ Command #5: generate oauth key for passport
++ Command #9: <absolute path> is absolute path of current directory in workspace container. This command required in order to share public files to Internet
++ Command #10: setup permission for pdf generating service
 
 4. update /etc/hosts to add site
 
@@ -154,7 +155,7 @@ Notes:
    b. Use ./sync.sh to run:
 
         + ./sync.sh install  --> install docker-sync (must have gem install already)
-        + ./sync.sh up nginx mariadb adminer php-worker beanstalkd beanstalkd-console --> run docker-sync, then run docker-compose
+        + ./sync.sh up nginx mariadb adminer php-worker rabbitmq --> run docker-sync, then run docker-compose to start all required services
         + ./sync.sh beetrack --> short command for whole long command above
         + ./sync.sh down  --> down docker-sync and all
 
@@ -187,3 +188,5 @@ docker exec -it <container id of php-worker> supervisorctl restart <process name
 docker exec -it <container id of php-worker> supervisorctl reload
 ```
 
+5. Monitor RabbitMQ jobs
+Open `beetrack.local:15672` to monitor
