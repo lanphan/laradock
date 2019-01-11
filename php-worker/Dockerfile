@@ -71,6 +71,16 @@ RUN if [ ${INSTALL_MYSQL_CLIENT} = true ]; then \
 RUN rm /var/cache/apk/* \
     && mkdir -p /var/www
 
+# Install AMQP:
+ARG INSTALL_AMQP=false
+
+RUN if [ ${INSTALL_AMQP} = true ]; then \
+    apk --update add rabbitmq-c rabbitmq-c-dev && \
+    pecl install amqp && \
+    docker-php-ext-enable amqp && \
+    docker-php-ext-install sockets \
+;fi
+
 #
 #--------------------------------------------------------------------------
 # Optional Supervisord Configuration
