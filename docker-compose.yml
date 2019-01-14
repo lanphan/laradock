@@ -469,6 +469,9 @@ services:
         - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
       depends_on:
         - php-fpm
+      hostname: beetrack-rabbitmq
+      volumes:
+        - ${DATA_PATH_HOST}/rabbitmq:/var/lib/rabbitmq
       networks:
         - backend
 
