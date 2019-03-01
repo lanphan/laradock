@@ -62,7 +62,36 @@ chmod -R 777 vendor/mpdf/mpdf/ttfontdata && chmod -R 755 vendor/mpdf/mpdf/graph_
    Database: tracking
 ```
 
-7. Create HTTPS local environment for developers (Ubuntu)
+7. Setup OpenAPI documentation view for local/staging sites:
+
++ install l5-swagger (for existing codebase)
+```
+composer update “darkaonline/l5-swagger”
+```
+
++ publish (don't run this step in production sites)
+```
+php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"
+```
+
++ generate doc
+```
+php artisan l5-swagger:generate
+```
+Please review ```storage/``` folder to see there is new ```api-docs``` sub-folder or not. Make sure that owner of ```api-docs``` should be ```laradock:www-data```
+
++ Done installation.
+
++ You can check source code to view example about OpenAPI spec in these classes below
+```
++ SwaggerModels\*: place to define schemas used in OpenAPI. In case we use Resource, please define schema in Resource (example: https://github.com/DarkaOnLine/L5-Swagger/issues/157)
++ config/l5-swagger.php: configuration for Swagger, including auth and constant definition
++ app/Http/Controllers/Api/AssetController.php: OpenAPI spec for /api/asset/lazyGet
++ app/Http/Controllers/Core/BaseController.php: Overall definition for OpenAPI spec and server list
++ app/Models/User.php (method findForPassport()): correct auth for Passport
+```
+
+8. Create HTTPS local environment for developers (Ubuntu)
    a. Go to XYZ/beetrack-laradock-local/nginx/ssl folder
 
 ```bash
@@ -97,7 +126,7 @@ You will be ask for passphrase one last time. Now you have 3 files in your temp 
 openssl x509 -req -days 365 -in myssl.csr -signkey myssl.key -out myssl.crt
 ```
 
-8. If you want to run automation tests, we're using these technologies below:
+9. If you want to run automation tests, we're using these technologies below:
 
    a. Cucumber + Capybara
 
