@@ -80,6 +80,12 @@ php artisan l5-swagger:generate
 ```
 Please review ```storage/``` folder to see there is new ```api-docs``` sub-folder or not. Make sure that owner of ```api-docs``` should be ```laradock:www-data```
 
++ in case you want to try Authorization in OpenAPI documentation view, please run command below to add common OpenAPI client (must have Passport installed already)
+```
+php artisan beetrack:add-openapi-client
+```
+This command above will generate OpenAPI client with: ```id=3``` and ```secret=Mv9m5RNrlXOzeF13nKJ3acdSAsqcCpZhBSZ1zZLk```.
+
 + Done installation.
 
 + You can check source code to view example about OpenAPI spec in these classes below
@@ -90,6 +96,12 @@ Please review ```storage/``` folder to see there is new ```api-docs``` sub-folde
 + app/Http/Controllers/Core/BaseController.php: Overall definition for OpenAPI spec and server list
 + app/Models/User.php (method findForPassport()): correct auth for Passport
 ```
+
++ Open ```https://beetrack.local/api/documentation``` to view OpenAPI documentation for Beetrack. Must login before accessing that page.
+
++ You can select Server to query from list of Servers
+
++ In case you query remote Server and want to execute protected API, must unlock it by Authorize first. Click on Authorize button (green button), enter username, password, client_id=3, client_secret=Mv9m5RNrlXOzeF13nKJ3acdSAsqcCpZhBSZ1zZLk then click Authorize. After authorization and if it's ok, dialog will show different content with Logout button. Click Close to close dialog, then you can try to execute any protected API.
 
 8. Create HTTPS local environment for developers (Ubuntu)
    a. Go to XYZ/beetrack-laradock-local/nginx/ssl folder
