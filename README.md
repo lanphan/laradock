@@ -231,3 +231,39 @@ docker exec -it <container id of php-worker> supervisorctl reload
 
 5. Monitor RabbitMQ jobs
 Open `beetrack.local:15672` to monitor
+
+6. Support Microsoft SQL Server
+a. Get latest source of beetrack-laradock-local and beetrack-web
+b. Down all docker services, rebuild adminer, php-fpm, workspace
+
+```
+docker-compose down
+docker-compose build --no-cache adminer php-fpm workspace
+```
+
+c. Start Beetrack with mssql container
+
+```
+docker-compose up -d nginx mssql adminer php-worker rabbitmq
+```
+
+d. Comment mariadb connection info in .env, copy mssql connection info from .env.beetrack
+
+```
+# Microsoft SQL Server
+ DB_CONNECTION=sqlsrv
+ DB_HOST=mssql
+ DB_PORT=1433
+ DB_DATABASE=tracking
+ DB_USERNAME=sa
+ DB_PASSWORD=yourStrong(!)Password
+```
+
+e. Exec into workspace, run migration
+
+```
+docker exec -it <workspace id> bash
+cd beetrack-web
+migrate
+```
+

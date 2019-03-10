@@ -69,7 +69,7 @@ elif [ "$1" == "beetrack" ] ; then
     docker-sync start;
 
     print_style "Initializing Docker Compose\n" "info"
-    COMPOSE_FILE="docker-compose.yml:docker-compose.sync.yml" && docker-compose up -d nginx mariadb adminer php-worker rabbitmq
+    COMPOSE_FILE="docker-compose.yml:docker-compose.sync.yml" && docker-compose up -d nginx mariadb mssql adminer php-worker rabbitmq
 
 elif [ "$1" == "down" ]; then
     print_style "Stopping Docker Compose\n" "info"
